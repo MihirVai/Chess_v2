@@ -120,16 +120,15 @@ double evaluate_material(const vector<vector<char>> &board)
             }
         }
     }
-    // getStage(white_score + black_score);
     return white_score - black_score;
 }
 
-// short getStage(int total_material)
-// {
-//     if (total_material >= 68) return 2; // opening
-//     else if (total_material <= 26) return 0; // endgame
-//     else return 1; // middlegame
-// }
+ int getStage(int total_material)
+ {
+     if (total_material >= 68) return 2; // opening
+     else if (total_material <= 26) return 0; // endgame
+     else return 1; // middlegame
+ }
 
 // This checks whether there is a pawn in the given column after or behind a given row for both white and black depending on dir
 // dir 1 means ahead or equal to the row of whichever side you are playing
@@ -588,7 +587,7 @@ double hanging_piece_penalty(const vector<vector<char>> &board, const vector<vec
             total_penalty -= black_penalty[i];
     }
 
-    return total_penalty;
+    return -total_penalty;
 }
 
 double weaker_attacked_penalty(const vector<vector<char>> &board, const vector<vector<vector<Piece>>> &control_squares, const vector<vector<vector<Piece>>> &oppcontrol_squares, bool turn)
@@ -733,7 +732,7 @@ double weaker_attacked_penalty(const vector<vector<char>> &board, const vector<v
             total_penalty -= black_penalty[i];
     }
 
-    return total_penalty;
+    return -total_penalty;
 }
 
 
@@ -817,10 +816,12 @@ double mobility(const vector<vector<char>> &board, const vector<vector<vector<Pi
     }
 
     for(auto itr:all_moves){
-        if(isupper(itr[0])&& itr[0]!='K'){
+        if(isupper(itr[0])&& itr[0]!='K' && itr[0]!='O'){
             string pos_in_char;
             pos_in_char.push_back(itr[itr.size()-2]);
             pos_in_char.push_back(itr[itr.size()-1]);
+            if (pos_in_char == "pp" || pos_in_char == "PP") continue;
+            // cout << pos_in_char << endl;
             pair<int,int> pos_in_num = sij(pos_in_char);
             bool res_in_hang = false , res_in_weak_att = false;
             if(white_control_squares[pos_in_num.first][pos_in_num.second].empty()&&black_control_squares[pos_in_num.first][pos_in_num.second].size()){
@@ -851,7 +852,7 @@ double mobility(const vector<vector<char>> &board, const vector<vector<vector<Pi
             if(min_val_attack < this_piece_val ) res_in_weak_att=true;
             if(!res_in_hang && !res_in_weak_att)white_mobility++;
         }
-        else if(islower(itr[0]) && itr[0]!='k' ){
+        else if(islower(itr[0]) && itr[0]!='k' && itr[0]!='o'){
             string pos_in_char;
             pos_in_char.push_back(itr[itr.size()-2]);
             pos_in_char.push_back(itr[itr.size()-1]);
