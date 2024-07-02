@@ -1,6 +1,18 @@
 #include "fen.h"
 #include "functions.h"
 
+void destroy_fen(string fen_val)
+{
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+    cout << "INVALID FEN:\n";
+    cout << fen_val << endl;
+    abort();
+}
+
 Board_FEN::Board_FEN()
 {
     default_FEN();
@@ -36,8 +48,9 @@ void Board_FEN::input_FEN(string fen_val)
             if (row >= 8)
             {
                 // Invalid FEN
-                default_FEN();
-                return;
+                destroy_fen(fen_val);
+                // default_FEN();
+                // return;
             }
             if (valid_piece_code(fen_val[cursor]))
             {
@@ -48,9 +61,15 @@ void Board_FEN::input_FEN(string fen_val)
             else
             {
                 // Invalid FEN
-                default_FEN();
-                return;
+                destroy_fen(fen_val);
+                // default_FEN();
+                // return;
             }
+        }
+        if (row!=8)
+        {
+            // Invalid FEN
+            destroy_fen(fen_val);
         }
         cursor++;
     }
@@ -66,8 +85,9 @@ void Board_FEN::input_FEN(string fen_val)
     else
     {
         // Invalid FEN
-        default_FEN();
-        return;
+        destroy_fen(fen_val);
+        // default_FEN();
+        // return;
     }
     white_castle_kingside = false;
     white_castle_queenside = false;
@@ -77,8 +97,9 @@ void Board_FEN::input_FEN(string fen_val)
     if (fen_val[cursor] != ' ')
     {
         // Invalid FEN
-        default_FEN();
-        return;
+        destroy_fen(fen_val);
+        // default_FEN();
+        // return;
     }
     cursor++;
     if (fen_val[cursor] == '-')
@@ -109,8 +130,9 @@ void Board_FEN::input_FEN(string fen_val)
                 break;
             default:
                 // Invalid FEN
-                default_FEN();
-                return;
+                destroy_fen(fen_val);
+                // default_FEN();
+                // return;
             }
             cursor++;
         }
@@ -118,8 +140,9 @@ void Board_FEN::input_FEN(string fen_val)
     if (fen_val[cursor] != ' ')
     {
         // Invalid FEN
-        default_FEN();
-        return;
+        destroy_fen(fen_val);
+        // default_FEN();
+        // return;
     }
     cursor++;
     if (fen_val[cursor] == '-')
@@ -138,16 +161,18 @@ void Board_FEN::input_FEN(string fen_val)
         else
         {
             // Invalid FEN
-            default_FEN();
-            return;
+            destroy_fen(fen_val);
+            // default_FEN();
+            // return;
         }
     }
     cursor++;
     if (fen_val[cursor] != ' ')
     {
         // Invalid FEN
-        default_FEN();
-        return;
+        destroy_fen(fen_val);
+        // default_FEN();
+        // return;
     }
     cursor++;
     int hfm = 0; // half move clock
